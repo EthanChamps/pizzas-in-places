@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(frontend-design:frontend-design)",
+      "mcp__chrome-devtools__navigate_page",
+      "Bash(lsof:*)",
+      "mcp__chrome-devtools__new_page",
+      "mcp__chrome-devtools__evaluate_script"
+    ]
+  }
+}
