@@ -2,8 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { getTodayLocation } from "@/lib/schedule";
 
-export default function Home() {
-  const todayLocation = getTodayLocation();
+export default async function Home() {
+  const todayLocation = await getTodayLocation();
+
+  const formatTime = (time: string) => {
+    return new Date(`1970-01-01T${time}Z`).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).replace(' ', '');
+  };
 
   return (
     <main className="min-h-screen bg-[#FAFAFA]">
@@ -19,10 +23,10 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center text-white px-6">
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-6">
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-medium mb-4 md:mb-6">
               Pizzas in Places
             </h1>
-            <p className="font-sans text-lg md:text-xl text-white/90 max-w-md mx-auto">
+            <p className="font-sans text-lg text-white/90 max-w-md mx-auto">
               Fresh sourdough pizza, made daily from our horse trailer
             </p>
           </div>
@@ -30,7 +34,7 @@ export default function Home() {
       </section>
 
       {/* Today's Location */}
-      <section className="py-20 px-6">
+      <section className="py-16 md:py-20 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <p className="font-sans text-sm uppercase tracking-widest text-neutral-500 mb-4">
             Find us today
@@ -41,10 +45,10 @@ export default function Home() {
                 {todayLocation.location}
               </h2>
               <p className="font-sans text-neutral-600 mb-2">
-                {todayLocation.time}
+                {formatTime(todayLocation.startTime)} - {formatTime(todayLocation.endTime)}
               </p>
               <p className="font-sans text-sm text-neutral-500">
-                {todayLocation.date}
+                {new Date(todayLocation.date).toLocaleDateString('en-GB', { month: 'long', day: 'numeric' })}
               </p>
             </>
           ) : (
@@ -67,7 +71,7 @@ export default function Home() {
       <div className="max-w-xs mx-auto border-t border-neutral-200" />
 
       {/* About */}
-      <section className="py-20 px-6">
+      <section className="py-16 md:py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-3xl md:text-4xl text-neutral-900 mb-8 text-center">
             Our Story
@@ -88,12 +92,12 @@ export default function Home() {
       </section>
 
       {/* Menu Preview */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-16 md:py-20 px-6 bg-white">
         <div className="max-w-4xl mx-auto">
           <h2 className="font-serif text-3xl md:text-4xl text-neutral-900 mb-12 text-center">
             The Menu
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             {[
               {
                 name: "Margherita",
@@ -152,7 +156,7 @@ export default function Home() {
       </section>
 
       {/* Schedule */}
-      <section className="py-20 px-6">
+      <section className="py-16 md:py-20 px-6">
         <div className="max-w-2xl mx-auto">
           <h2 className="font-serif text-3xl md:text-4xl text-neutral-900 mb-12 text-center">
             This Week
@@ -174,7 +178,7 @@ export default function Home() {
                 <span className="font-serif text-lg text-neutral-900">
                   {item.day}
                 </span>
-                <span className="font-sans text-neutral-600">
+                <span className="font-sans text-neutral-600 text-right">
                   {item.location}
                 </span>
               </div>
@@ -194,49 +198,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-16 px-6 border-t border-neutral-200">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <h3 className="font-serif text-2xl text-neutral-900 mb-4">
-              Pizzas in Places
-            </h3>
-            <a
-              href="https://www.instagram.com/pizzasinplaces/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-sans text-neutral-600 hover:text-neutral-900 transition-colors link-underline"
-            >
-              @pizzasinplaces
-            </a>
-          </div>
-          <div className="flex justify-center gap-8 font-sans text-sm text-neutral-500">
-            <Link href="/menu" className="hover:text-neutral-900 transition-colors">
-              Menu
-            </Link>
-            <Link href="/schedule" className="hover:text-neutral-900 transition-colors">
-              Schedule
-            </Link>
-            <Link href="/events" className="hover:text-neutral-900 transition-colors">
-              Events
-            </Link>
-            <Link href="/contact" className="hover:text-neutral-900 transition-colors">
-              Contact
-            </Link>
-          </div>
-          <p className="text-center mt-12 font-sans text-xs text-neutral-400">
-            Site by{" "}
-            <a
-              href="https://ethanchampion.dev"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-neutral-600 transition-colors"
-            >
-              Ethan Champion
-            </a>
-          </p>
-        </div>
-      </footer>
     </main>
   );
 }
